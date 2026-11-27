@@ -1,5 +1,6 @@
 @use(function App\setting)
 @use(function App\theme)
+@use(Illuminate\Support\Str)
 <?php
     use function Laravel\Folio\name;
     name('home');
@@ -67,25 +68,13 @@
             <x-layout.grid-divider />
 
             <x-layout.grid-section heading="Next Event">
-                <x-type.para variant="dim">
-                    We're meeting on Wednesday November 11th for the last
-                    time in the crazy year which has been 2026.
-                </x-type.para>
-                <x-type.para variant="dim">
-                    And what else would we talk about to bookend 2026 but AI?
-                    Returning speaker <a class="link link-focus" href="https://www.linkedin.com/in/jamesshawturner/">James Turner</a>
-                    shares his experiences delivering production code with AI
-                    tools.
-                </x-type.para>
-                <x-type.para variant="dim">
-                    Craft pints or soft drinks at Unbarred after.
-                </x-type.para>
-                <x-meetup-link :event-id="317013388" />
-{{--                <x-type.para variant="dim">--}}
-{{--                    We're meeting again in November 2026. Join our Meetup group--}}
-{{--                    to stay updated!--}}
-{{--                </x-type.para>--}}
-{{--                <x-meetup-link />--}}
+                @php
+                    $next = setting('next event');
+                @endphp
+                @foreach($next->paragraphs() as $paragraph)
+                    <x-type.para variant="dim">{{ $paragraph }}</x-type.para>
+                @endforeach
+                <x-meetup-link :event-id="$next->meetup_id" />
             </x-layout.grid-section>
 
             <x-layout.grid-divider />
