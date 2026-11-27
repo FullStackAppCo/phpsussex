@@ -31,8 +31,10 @@ midnight UTC, and can be triggered manually from the Actions tab.
 
 ## Dependency Updates
 Dependabot checks Composer, npm and GitHub Actions dependencies
-daily. Minor and patch updates are merged automatically once tests
-pass; major updates are left for manual review. The regular merges
+daily. Composer minor and patch updates are merged automatically
+once tests pass, after a three-day cooldown on new releases. Major
+Composer updates, and all npm and GitHub Actions updates, are left
+for manual review. The regular merges
 also keep the repository active, so GitHub doesn't disable the
 nightly deploy after 60 days of inactivity.
 
