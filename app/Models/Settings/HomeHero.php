@@ -2,6 +2,7 @@
 
 namespace App\Models\Settings;
 
+use Database\Factories\Settings\HomeHeroFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\MediaLibrary\HasMedia;
@@ -10,7 +11,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class HomeHero extends Setting implements HasMedia
 {
-    /** @use HasFactory<\Database\Factories\Settings\HomeHeroFactory> */
+    /** @use HasFactory<HomeHeroFactory> */
     use HasFactory;
 
     use InteractsWithMedia;
@@ -25,8 +26,8 @@ class HomeHero extends Setting implements HasMedia
         $this->addMediaConversion('pixellated')
             ->performOnCollections('image')
             ->withResponsiveImages()
-            ->pixelate(3)
-            ->nonQueued();
+            ->nonQueued()
+            ->pixelate(3);
     }
 
     public function value(): Attribute
