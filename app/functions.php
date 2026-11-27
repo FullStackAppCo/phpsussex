@@ -5,7 +5,6 @@ namespace App;
 use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 
 function setting($name): mixed

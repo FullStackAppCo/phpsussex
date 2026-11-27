@@ -2,11 +2,9 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-use function App\slidesUrl;
 use function App\variant;
 
 class FunctionsTest extends TestCase
