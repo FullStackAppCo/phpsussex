@@ -6,6 +6,7 @@ use App\Data\NextEventData;
 use App\Models\Settings\NextEvent;
 use Dom\Element;
 use Dom\HTMLDocument;
+use Dom\Node;
 use Dom\XPath;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
@@ -71,14 +72,19 @@ class SyncNextEvent extends Command
         $card = "*[@data-testid='group-events-card']";
 
         $link = $xpath->query("//{$card}//h:a[starts-with(@href, '{$eventsUrl}')]")->item(0);
-        $id = Str::of($link?->getAttribute('href'))->after($eventsUrl)->match('/^\d+/')->value();
+
+        if (! $link instanceof Element) {
+            return null;
+        }
+
+        $id = Str::of($link->getAttribute('href'))->after($eventsUrl)->match('/^\d+/')->value();
 
         if ($id === '') {
             return null;
         }
 
         $description = collect($xpath->query("ancestor::{$card}[1]//h:p", $link))
-            ->map(fn (Element $paragraph): string => trim($paragraph->textContent))
+            ->map(fn (Node $paragraph): string => trim($paragraph->textContent ?? ''))
             ->implode("\n\n");
 
         return ['id' => $id, 'description' => $description];
