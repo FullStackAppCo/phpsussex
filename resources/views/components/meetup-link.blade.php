@@ -2,7 +2,7 @@
 @use(Illuminate\Support\Str)
 @use(Illuminate\Support\Stringable)
 @php
-$href = Str::of('https://www.meetup.com/php-sussex/')
+$href = Str::of('https://www.meetup.com/'.config('services.meetup.group').'/')
     ->when($eventId, fn (Stringable $s) => $s->append("events/$eventId/"));
 @endphp
 <a

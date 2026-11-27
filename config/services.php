@@ -35,6 +35,10 @@ return [
         ],
     ],
 
+    'meetup' => [
+        'group' => env('MEETUP_GROUP', 'php-sussex'),
+    ],
+
     'fathom' => [
         'site_id' => env('FATHOM_SITE'),
     ],

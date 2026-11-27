@@ -24,4 +24,15 @@ final class MeetupLinkTest extends TestCase
         $view->assertSee('href="https://www.meetup.com/php-sussex/events/abc123/', escape: false);
         $view->assertSee('data-event="meetup event click"', escape: false);
     }
+
+    #[Test]
+    public function it_links_to_the_configured_group(): void
+    {
+        config(['services.meetup.group' => 'example-group']);
+
+        $this->blade('<x-meetup-link />')
+            ->assertSee('href="https://www.meetup.com/example-group/"', escape: false);
+        $this->blade('<x-meetup-link event-id="abc123" />')
+            ->assertSee('href="https://www.meetup.com/example-group/events/abc123/"', escape: false);
+    }
 }
