@@ -31,6 +31,12 @@ jobs:
         env:
           FATHOM_SITE: ${{ secrets.FATHOM_SITE }}
 
+      - name: Sync next event from Meetup
+        continue-on-error: true
+        run: |
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          php artisan app:sync-next-event
+
       - name: Generate static site
         run: php artisan export
 
