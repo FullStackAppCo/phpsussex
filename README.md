@@ -26,6 +26,26 @@ manually it's as simple as:
 php artisan export
 ```
 
+The deploy workflow runs on every push to `main`, nightly at
+midnight UTC, and can be triggered manually from the Actions tab.
+
+## Dependency Updates
+Dependabot checks Composer, npm and GitHub Actions dependencies
+daily. Minor and patch updates are merged automatically once tests
+pass; major updates are left for manual review. The regular merges
+also keep the repository active, so GitHub doesn't disable the
+nightly deploy after 60 days of inactivity.
+
+To enable this on a repository (including forks):
+
+1. **Settings → General → Pull Requests**: tick **Allow auto-merge**.
+2. **Settings → Rules → Rulesets**: add a branch ruleset targeting
+   `main` with **Require status checks to pass** enabled and the
+   `tests` check added. Without this, auto-merge would merge
+   Dependabot PRs immediately without waiting for tests. Add the
+   **Repository admin** role to the bypass list so maintainers can
+   still push directly to `main`.
+
 ## Slides
 
 ## License
