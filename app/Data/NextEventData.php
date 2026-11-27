@@ -24,7 +24,7 @@ class NextEventData extends Data
         return Str::of($this->raw)
             ->trim()
             ->split('/\R\s*\R/')
-            ->map(trim(...))
+            ->map(fn (string $paragraph): string => trim($paragraph))
             ->all();
     }
 }
