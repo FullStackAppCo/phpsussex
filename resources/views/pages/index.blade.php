@@ -150,12 +150,6 @@
                 <x-type.para variant="dim" class="mb-8">We couldn't do it on our own. Massive thanks to our amazing friends:</x-type.para>
                 <div class="flex flex-row flex-wrap gap-x-20 gap-y-16">
                     <x-sponsor
-                        name="Runway East"
-                        provides="Venue"
-                        url="https://runwayea.st"
-                        class="scale-85 -translate-x-[1.25rem]"
-                    />
-                    <x-sponsor
                         name="Silicon Brighton"
                         provides="Support & AV"
                         url="https://siliconbrighton.com"
