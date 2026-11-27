@@ -6,7 +6,7 @@ use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 
-class HomeControllerTest extends TestCase
+final class HomeControllerTest extends TestCase
 {
     public function test_it_returns_home_view(): void
     {

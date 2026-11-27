@@ -2,12 +2,15 @@
 
 namespace App\Models\Settings;
 
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property string $model
+ */
+#[Table('settings')]
 abstract class Setting extends Model
 {
-    protected $table = 'settings';
-
     protected function casts(): array
     {
         return [
@@ -19,10 +22,8 @@ abstract class Setting extends Model
     {
         parent::boot();
 
-        static::saving(function (self $model) {
-            if (is_null($model->model)) {
-                $model->model = static::class;
-            }
+        static::creating(function (self $model) {
+            $model->model = static::class;
         });
 
         static::addGlobalScope('model', function ($builder) {
