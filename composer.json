@@ -19,6 +19,7 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
+        "larastan/larastan": "^3.0",
         "laravel/boost": "^2.2",
         "laravel/pail": "^1.2.5",
         "laravel/pint": "^1.27",
@@ -69,8 +70,11 @@
         "build": [
             "@php artisan export"
         ],
+        "analyze": [
+            "@php ./vendor/bin/phpstan analyse"
+        ],
         "format": [
-            "./vendor/bin/pint"
+            "@php ./vendor/bin/pint"
         ],
         "setup": [
             "composer install",
