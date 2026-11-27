@@ -1,3 +1,4 @@
+@use(App\Data\NextEventData)
 @use(function App\setting)
 @use(function App\theme)
 @use(Illuminate\Support\Str)
@@ -70,8 +71,9 @@
             <x-layout.grid-section heading="Next Event">
                 @php
                     $next = setting('next event');
+                    $blurb = new NextEventData($next->meetup_id, Str::limit($next->raw, 400, '…', preserveWords: true));
                 @endphp
-                @foreach($next->paragraphs() as $paragraph)
+                @foreach($blurb->paragraphs() as $paragraph)
                     <x-type.para variant="dim">{{ $paragraph }}</x-type.para>
                 @endforeach
                 <x-meetup-link :event-id="$next->meetup_id" />

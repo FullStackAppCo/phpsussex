@@ -140,4 +140,14 @@ final class HomeControllerTest extends TestCase
             ->assertSee('href="https://www.meetup.com/php-sussex/events/317013388/"', escape: false)
             ->assertDontSee('data-event="meetup group click"', escape: false);
     }
+
+    #[Test]
+    public function it_truncates_a_long_blurb(): void
+    {
+        $this->nextEventBlurb(str_repeat('word ', 100)."\n\nSecond paragraph.");
+
+        $this->get('/')
+            ->assertSee('word word…</p>', escape: false)
+            ->assertDontSee('Second paragraph.');
+    }
 }
