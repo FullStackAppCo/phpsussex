@@ -5,6 +5,7 @@ namespace Tests\Feature\Views\Pages;
 use App\Data\NextEventData;
 use App\Models\Settings\NextEvent;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -17,6 +18,7 @@ final class IndexTest extends TestCase
     {
         parent::setUp();
 
+        Queue::fake();
         Storage::fake('public');
         $this->seed();
     }
