@@ -2,12 +2,12 @@
 
 namespace App\Models\Settings;
 
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 
+#[Table('settings')]
 abstract class Setting extends Model
 {
-    protected $table = 'settings';
-
     protected function casts(): array
     {
         return [
