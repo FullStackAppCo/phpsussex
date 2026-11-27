@@ -28,6 +28,8 @@ php artisan export
 
 The deploy workflow runs on every push to `main`, nightly at
 midnight UTC, and can be triggered manually from the Actions tab.
+See the next section on dependency updates, as these ensure GitHub
+does not switch off the scheduled deploy after 60 days. 
 
 ## Dependency Updates
 Dependabot checks Composer, npm and GitHub Actions dependencies
@@ -47,8 +49,6 @@ To enable this on a repository (including forks):
    Dependabot PRs immediately without waiting for tests. Add the
    **Repository admin** role to the bypass list so maintainers can
    still push directly to `main`.
-
-## Slides
 
 ## License
 
