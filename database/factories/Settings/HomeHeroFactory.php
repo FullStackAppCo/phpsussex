@@ -2,10 +2,11 @@
 
 namespace Database\Factories\Settings;
 
+use App\Models\Settings\PortraitYannick;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Settings\PortraitYannick>
+ * @extends Factory<PortraitYannick>
  */
 class HomeHeroFactory extends Factory
 {
