@@ -73,6 +73,14 @@
                     $next = setting('next event');
                     $blurb = new NextEventData($next->meetup_id, Str::limit($next->raw, 400, '…', preserveWords: true));
                 @endphp
+                @if($next->starts_at)
+                    <x-type
+                        tag="time"
+                        variant="display"
+                        datetime="{{ $next->starts_at->toIso8601String() }}"
+                        class="block mb-3 text-lg md:text-2xl"
+                    >{{ $next->starts_at->format('l j F Y, g:ia') }}</x-type>
+                @endif
                 @foreach($blurb->paragraphs() as $paragraph)
                     <x-type.para variant="dim">{{ $paragraph }}</x-type.para>
                 @endforeach

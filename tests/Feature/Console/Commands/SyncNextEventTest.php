@@ -38,13 +38,14 @@ final class SyncNextEventTest extends TestCase
     /**
      * @param  list<string>  $paragraphs
      */
-    private function card(string $href, array $paragraphs): string
+    private function card(string $href, array $paragraphs, ?string $datetime = '2026-09-09T18:30:00+01:00[Europe/London]'): string
     {
+        $time = $datetime === null ? '' : "<time datetime=\"{$datetime}\">Wed, Sep 9 · 6:30 PM BST</time>";
         $paragraphs = implode('', array_map(fn (string $paragraph) => "<p class=\"mb-ds2-10\">{$paragraph}</p>", $paragraphs));
 
         return <<<HTML
             <div data-testid="group-events-card">
-                <a href="{$href}" data-event-label="Event Card"><h3>Event title</h3></a>
+                <a href="{$href}" data-event-label="Event Card"><h3>Event title</h3>{$time}</a>
                 <div class="line-clamp-3">{$paragraphs}</div>
             </div>
             HTML;
@@ -68,6 +69,39 @@ final class SyncNextEventTest extends TestCase
         $value = NextEvent::query()->sole()->value;
         $this->assertSame('123456', $value->meetup_id);
         $this->assertSame("Join us!\n\nPizza & drinks.", $value->raw);
+        $this->assertSame('2026-09-09T18:30:00+01:00', $value->starts_at?->toIso8601String());
+    }
+
+    #[Test]
+    public function it_saves_the_start_time_of_a_gmt_event(): void
+    {
+        $this->mockBrowsershot($this->card('https://www.meetup.com/example-group/events/123456/', ['Join us!'], '2026-11-11T18:30:00Z[Europe/London]'));
+
+        $this->artisan('app:sync-next-event')->assertSuccessful();
+
+        $this->assertSame('2026-11-11T18:30:00+00:00', NextEvent::query()->sole()->value->starts_at?->toIso8601String());
+    }
+
+    #[Test]
+    public function it_saves_without_a_start_time_when_the_card_has_none(): void
+    {
+        $this->mockBrowsershot($this->card('https://www.meetup.com/example-group/events/123456/', ['Join us!'], null));
+
+        $this->artisan('app:sync-next-event')->assertSuccessful();
+
+        $value = NextEvent::query()->sole()->value;
+        $this->assertSame('123456', $value->meetup_id);
+        $this->assertNull($value->starts_at);
+    }
+
+    #[Test]
+    public function it_saves_without_a_start_time_when_the_datetime_is_invalid(): void
+    {
+        $this->mockBrowsershot($this->card('https://www.meetup.com/example-group/events/123456/', ['Join us!'], 'not a date'));
+
+        $this->artisan('app:sync-next-event')->assertSuccessful();
+
+        $this->assertNull(NextEvent::query()->sole()->value->starts_at);
     }
 
     #[Test]

@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers;
 use App\Data\NextEventData;
 use App\Http\Controllers\HomeController;
 use App\Models\Settings\NextEvent;
+use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Route;
@@ -20,15 +21,16 @@ final class HomeControllerTest extends TestCase
     {
         parent::setUp();
 
+        config(['services.meetup.group' => 'php-sussex']);
         Queue::fake();
         Storage::fake('public');
         $this->seed();
     }
 
-    private function nextEventBlurb(string $blurb, ?string $meetupId = null): void
+    private function nextEventBlurb(string $blurb, ?string $meetupId = null, ?CarbonImmutable $startsAt = null): void
     {
         NextEvent::query()->firstOrFail()->forceFill([
-            'value' => new NextEventData(meetup_id: $meetupId, raw: $blurb),
+            'value' => new NextEventData(meetup_id: $meetupId, raw: $blurb, starts_at: $startsAt),
         ])->save();
     }
 
@@ -149,5 +151,24 @@ final class HomeControllerTest extends TestCase
         $this->get('/')
             ->assertSee('word word…</p>', escape: false)
             ->assertDontSee('Second paragraph.');
+    }
+
+    #[Test]
+    public function it_shows_the_next_event_start_time_in_local_time(): void
+    {
+        $this->nextEventBlurb('Join us.', meetupId: '317013388', startsAt: CarbonImmutable::parse('2026-09-09T18:30:00+01:00'));
+
+        $this->get('/')
+            ->assertSee('datetime="2026-09-09T18:30:00+01:00"', escape: false)
+            ->assertSee('Wednesday 9 September 2026, 6:30pm')
+            ->assertSeeInOrder(['Wednesday 9 September 2026, 6:30pm', 'Join us.']);
+    }
+
+    #[Test]
+    public function it_omits_the_start_time_when_there_is_none(): void
+    {
+        $this->nextEventBlurb('Next event coming soon.');
+
+        $this->get('/')->assertDontSee('<time', escape: false);
     }
 }

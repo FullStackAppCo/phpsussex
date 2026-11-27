@@ -7,6 +7,13 @@ use Tests\TestCase;
 
 final class MeetupLinkTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config(['services.meetup.group' => 'php-sussex']);
+    }
+
     #[Test]
     public function it_shows_group_link_when_no_event(): void
     {

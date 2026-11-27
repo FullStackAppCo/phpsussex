@@ -2,6 +2,7 @@
 
 namespace App\Data;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Str;
 use Spatie\LaravelData\Attributes\Validation\Max;
 use Spatie\LaravelData\Data;
@@ -12,6 +13,7 @@ class NextEventData extends Data
         public ?string $meetup_id,
         #[Max(5000)]
         public string $raw,
+        public ?CarbonImmutable $starts_at = null,
     ) {
         //
     }

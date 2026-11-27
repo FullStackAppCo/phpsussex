@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use App\Data\NextEventData;
 use App\Models\Settings\NextEvent;
+use Carbon\CarbonImmutable;
+use Carbon\Exceptions\InvalidFormatException;
 use Dom\Element;
 use Dom\HTMLDocument;
 use Dom\Node;
@@ -50,7 +52,11 @@ class SyncNextEvent extends Command
         }
 
         $setting->forceFill([
-            'value' => new NextEventData(meetup_id: $event['id'], raw: $description->value()),
+            'value' => new NextEventData(
+                meetup_id: $event['id'],
+                raw: $description->value(),
+                starts_at: $event['starts_at'],
+            ),
         ])->save();
 
         $this->info("Saved next event {$event['id']}.");
@@ -61,7 +67,7 @@ class SyncNextEvent extends Command
     /**
      * Finds the first event card on the listing that links to an event in the group.
      *
-     * @return array{id: string, description: string}|null
+     * @return array{id: string, description: string, starts_at: CarbonImmutable|null}|null
      */
     private function firstEvent(string $html): ?array
     {
@@ -83,10 +89,34 @@ class SyncNextEvent extends Command
             return null;
         }
 
+        $time = $xpath->query("ancestor::{$card}[1]//h:time[@datetime]", $link)->item(0);
+
         $description = collect($xpath->query("ancestor::{$card}[1]//h:p", $link))
             ->map(fn (Node $paragraph): string => trim($paragraph->textContent ?? ''))
             ->implode("\n\n");
 
-        return ['id' => $id, 'description' => $description];
+        return [
+            'id' => $id,
+            'description' => $description,
+            'starts_at' => $time instanceof Element ? $this->parseDateTime($time->getAttribute('datetime') ?? '') : null,
+        ];
+    }
+
+    /**
+     * Parses Meetup's datetime attribute, an ISO 8601 date with a bracketed zone suffix, e.g. 2026-09-09T18:30:00+01:00[Europe/London].
+     */
+    private function parseDateTime(string $datetime): ?CarbonImmutable
+    {
+        $iso = Str::before($datetime, '[');
+
+        if (trim($iso) === '') {
+            return null;
+        }
+
+        try {
+            return CarbonImmutable::parse($iso);
+        } catch (InvalidFormatException) {
+            return null;
+        }
     }
 }
