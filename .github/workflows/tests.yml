@@ -18,5 +18,11 @@ jobs:
       - name: Setup Laravel Environment
         uses: ./.github/actions/setup-laravel
 
+      - name: Check code style
+        run: composer format -- --test
+
+      - name: Run static analysis
+        run: composer analyze
+
       - name: Run tests
         run: composer test
