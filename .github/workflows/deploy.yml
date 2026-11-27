@@ -31,6 +31,9 @@ jobs:
         env:
           FATHOM_SITE: ${{ secrets.FATHOM_SITE }}
 
+      - name: Install Chrome for Puppeteer
+        run: npx puppeteer browsers install chrome
+
       - name: Sync next event from Meetup
         continue-on-error: true
         run: |
