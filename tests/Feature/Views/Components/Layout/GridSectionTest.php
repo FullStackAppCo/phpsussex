@@ -5,7 +5,7 @@ namespace Tests\Feature\Views\Components\Layout;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-class GridSectionTest extends TestCase
+final class GridSectionTest extends TestCase
 {
     #[Test]
     public function it_generates_id_from_heading(): void

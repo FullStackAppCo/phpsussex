@@ -7,7 +7,7 @@ use Tests\TestCase;
 
 use function App\variant;
 
-class FunctionsTest extends TestCase
+final class FunctionsTest extends TestCase
 {
     #[Test]
     public function it_resolves_single_variant(): void

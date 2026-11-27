@@ -5,7 +5,7 @@ namespace Tests\Feature\Views\Components;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-class MeetupLinkTest extends TestCase
+final class MeetupLinkTest extends TestCase
 {
     #[Test]
     public function it_shows_group_link_when_no_event(): void

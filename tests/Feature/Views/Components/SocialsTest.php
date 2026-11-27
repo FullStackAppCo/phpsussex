@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-class SocialsTest extends TestCase
+final class SocialsTest extends TestCase
 {
     #[Test]
     public function it_includes_fathom_event_data(): void
